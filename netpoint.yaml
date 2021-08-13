@@ -761,7 +761,7 @@ components:
       example:
         quantity: 10
     Request7:
-      title: Request7
+      title: JWT Token
       required:
         - username
         - password

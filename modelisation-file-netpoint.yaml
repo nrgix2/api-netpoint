@@ -1,0 +1,1729 @@
+openapi: 3.0.0
+info:
+  title: API SECUSERVE
+  description: This documentation is for the users wanting to use the Secuserve API
+  contact: {}
+  version: '1.0'
+servers:
+  # Added by API Auto Mocking Plugin
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/nrgix2/Netpoint/1.0
+  - description: SwaggerHub API Auto Mocking
+    url: https://dev-msp.security-mail.net
+tags:
+  - name: Login
+    description: The route to generate a JWT TOKEN, with a username, password and the profil level
+  - name: Client
+    description: All the routes for the CLIENT
+  - name: Clients
+    description: Get All CLIENTS
+  - name: Isp
+    description: All the routes for the ISP
+  - name: Isps
+    description: Get ALL ISPS
+  - name: Domain
+    description: All the routes for the DOMAIN
+  - name: Domains
+    description: Get All Domains
+  - name: SolutionForDomainOrder
+    description: All the routes for the SOLUTIONFORDOMAINORDER
+  - name: SolutionForDomain
+    description: All the routes for the SOLUTIONFORDOMAIN
+  - name: Solution
+    description: All the routes for the SOLUTION
+  - name: Solutions
+    description: Get ALL SOLUTIONS
+  - name: User
+    description: All the routes for the USER
+  - name: Users
+    description: Get All Users
+  - name: Order
+    description: All the routes for the ORDER
+  - name: Orders
+    description: Get ALL ORDERS
+paths:
+  /login_check:
+    post:
+      tags:
+        - Login
+      description: This route will generate the JWT TOKEN that will secure the API
+      operationId: /public/api/login_check
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/loginCheck'
+            example:
+              username: ''
+              password: ''
+        required: true
+      responses:
+        '201':
+          description: JWT Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/jwt_token_created'
+              examples:
+                JWT_TOKEN created:
+                  value:
+                    token: JWT_TOKEN
+        '401':
+          description: Invalid credentials
+      deprecated: false
+  /client:
+    post:
+      tags:
+        - Client
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: /client
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/client'
+            example:
+              adresse: 12 rue la
+              code: 1234
+              code_postal: 12345
+              contact: a@a.com
+              id_tenant: 1
+              numero: 234567890
+              numero_siret: 777227777
+              pays: France
+              raison_sociale: TESTINGeuBYANTOINE
+              isp_id: 263
+              ville: Lyon
+          application/xml:
+            schema:
+              type: object
+              properties: {}
+          multipart/form-data:
+            schema:
+              type: object
+              properties: {}
+        required: true
+      responses:
+        '201':
+          description: Client Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/client_created'
+              examples:
+                Client created example:
+                  value:
+                    id: '12'
+        '401':
+          description: Unauthorized
+        '409':
+          description: Missing one field or improperly completed
+      deprecated: false
+      security:
+        - bearerAuth: []
+  /client/{id}:
+    get:
+      tags:
+        - Client
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: get-client-by-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Client Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/client_found'
+              examples:
+                Get One Client:
+                  value:
+                    id: 1
+                    id_tenant: '1'
+                    code: '1234'
+                    numero_siret: '12342'
+                    numero: '0123456789'
+                    raison_sociale: Lyon
+                    contact: a@a.com
+                    adresse: Rue du a
+                    code_postal: '01234'
+                    ville: 'Lyon '
+                    pays: France
+        '401':
+          description: Unauthorized
+        '404':
+          description: Client Not Found
+      security:
+        - bearerAuth: []
+    put:
+      tags:
+        - Client
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: put-client-by-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User Edited
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user_edited'
+              examples:
+                Edit a Client:
+                  value:
+                    id: '12'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Client Not Found
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - Client
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: delete-client-by-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Client Not Found
+        '401':
+          description: Unauthorized
+        '404':
+          description: Client Not Found
+      security:
+        - bearerAuth: []
+  /clients:
+    get:
+      tags:
+        - Clients
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: get-all-clients
+      responses:
+        '200':
+          description: Clients Found
+          content:
+            application/json:
+              schema:
+                minItems: 1
+                uniqueItems: true
+                type: array
+                items:
+                  $ref: '#/components/schemas/client_found'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        '404':
+          description: Clients Not Found
+      security:
+        - bearerAuth: []
+  /isp:
+    post:
+      tags:
+        - Isp
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: /isp
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/isp'
+            example:
+              name: antoinetestinge
+              password: '1231'
+              ref: theref
+              email: secuserve@secuserve.com
+        required: true
+      responses:
+        '201':
+          description: Isp Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/isp_created'
+              examples:
+                Isp Created:
+                  value:
+                    id: '12'
+        '401':
+          description: Unauthorized
+        '409':
+          description: Missing one field or improperly completed
+      deprecated: false
+      security:
+        - bearerAuth: []
+  /isp/{id}:
+    get:
+      tags:
+        - Isp
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: get-isp-by-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Isp Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/isp_found'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Isp Not Found
+      security:
+        - bearerAuth: []
+    put:
+      tags:
+        - Isp
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: put-isp-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Isp Edited
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/edited'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Isp Not Found
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - Isp
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: delete-isp-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Isp Deleted
+        '401':
+          description: Unauthorized
+        '404':
+          description: Isp Not Found
+      security:
+        - bearerAuth: []
+  /isps:
+    get:
+      tags:
+        - Isps
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: get-all-isps
+      responses:
+        '200':
+          description: Isps Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/isp_found'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Isps Not Found
+      security:
+        - bearerAuth: []
+  /domain:
+    post:
+      tags:
+        - Domain
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: /domain
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/domain'
+            example:
+              name: antoineistestingsomezing.com
+              mailAdmin: adddministratif@secuserve.com
+              lang: fr
+              client_id: 1
+              isp_id: 263
+              quantity: 10
+              id_elt: 41
+        required: true
+      responses:
+        '201':
+          description: Domain Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domain_created'
+              examples:
+                Domain Created:
+                  value:
+                    id: '12'
+        '401':
+          description: Unauthorized
+        '409':
+          description: Missing one field or improperly completed
+      deprecated: false
+      security:
+        - bearerAuth: []
+  /domain/{id}:
+    get:
+      tags:
+        - Domain
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: get-domain-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Domain Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domain_found'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Domain Not Found
+      security:
+        - bearerAuth: []
+    put:
+      tags:
+        - Domain
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: put-domain-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Domain Edited
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/edited'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Domain Not Found
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - Domain
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: delete-domain-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'Domain Deleted '
+        '401':
+          description: Unauthorized
+        '404':
+          description: Domain Not Found
+      security:
+        - bearerAuth: []
+  /domain/{id}/solutions:
+    get:
+      tags:
+        - SolutionForDomain
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: get-domain-id-solutions
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SolutionOnDomains Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SolutionForDomain_found'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Domain or Solution Not Found
+      security:
+        - bearerAuth: []
+  /domain/{id}/solution/{id_solution}:
+    put:
+      tags:
+        - SolutionForDomain
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: put-domain-id-solution-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: id_solution
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/solutionOnDomain'
+            example:
+              quantity: 12345
+        required: true
+      responses:
+        '200':
+          description: SolutionOnDomain Edited
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/edited'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Domain or Solution Not Found
+      security:
+        - bearerAuth: []
+    post:
+      tags:
+        - SolutionForDomain
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: post-domain-id-solution-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: id_solution
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/solutionOnDomain'
+            example:
+              quantity: 12345
+        required: true
+      responses:
+        '200':
+          description: Solution Added on the Domain
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/solution_added_on_domain'
+              examples:
+                Solution Added on Domain:
+                  value:
+                    id: '12'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Domain or Solution Not Found
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - SolutionForDomain
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: delete-domain-id-solution-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: id_solution
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SolutionOnDomain Deleted
+        '401':
+          description: Unauthorized
+        '404':
+          description: Domain or Solution Not Found
+      security:
+        - bearerAuth: []
+  /domains:
+    get:
+      tags:
+        - Domains
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: get-domains
+      responses:
+        '200':
+          description: Domains Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domain_found'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Domains Not Found
+      security:
+        - bearerAuth: []
+  /solution:
+    post:
+      tags:
+        - Solution
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: /solution
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/solution'
+            example:
+              name: 12345 SecuTesting
+              name_client: SecuTest
+              famille: ANM
+              id_ref: 0
+        required: true
+      responses:
+        '201':
+          description: Solution Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/solution_created'
+              examples:
+                Solution Created:
+                  value:
+                    id: '12'
+        '401':
+          description: Unauthorized
+        '409':
+          description: Missing one field or improperly completed
+      deprecated: false
+      security:
+        - bearerAuth: []
+  /solution/{id}:
+    get:
+      tags:
+        - Solution
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: get-solution-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Solution Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/solution_found'
+        '201':
+          description: Created
+        '404':
+          description: Solution Not Found
+      security:
+        - bearerAuth: []
+      x-internal: false
+    put:
+      tags:
+        - Solution
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: put-solution-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Solution Edited
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/edited'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - Solution
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: delete-solution-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Solution Deleted
+        '401':
+          description: Unauthorized
+        '404':
+          description: Solution Not Found
+      security:
+        - bearerAuth: []
+  /solutions:
+    get:
+      tags:
+        - Solutions
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: get-solutions
+      responses:
+        '200':
+          description: Solutions Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/solution_found'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Solutions Not Found
+      security:
+        - bearerAuth: []
+  /user:
+    post:
+      tags:
+        - User
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: post-user
+      responses:
+        '201':
+          description: User Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user_created'
+              examples:
+                User Created:
+                  value:
+                    id: '12'
+        '401':
+          description: Unauthorized
+        '409':
+          description: Missing one field or improperly completed
+      security:
+        - bearerAuth: []
+  /user/{id}:
+    get:
+      tags:
+        - User
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: get-user-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user_found'
+              examples:
+                One User Found:
+                  value:
+                    id: 20
+                    email: ''
+                    civilite: ''
+                    nom: ''
+                    prenom: ''
+                    isp: ''
+                    created: ''
+                    updated: ''
+                    password: ''
+        '401':
+          description: Unauthorized
+        '404':
+          description: User Not Found
+      security:
+        - bearerAuth: []
+    put:
+      tags:
+        - User
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: put-user-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User Edited
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/edited'
+        '401':
+          description: Unauthorized
+        '404':
+          description: User Not Found
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - User
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: delete-user-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User Deleted
+        '401':
+          description: Unauthorized
+        '404':
+          description: User Not Found
+      security:
+        - bearerAuth: []
+  /users:
+    get:
+      tags:
+        - Users
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: get-users
+      responses:
+        '200':
+          description: 'Users Found '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user_found'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Users Not Found
+      security:
+        - bearerAuth: []
+  /order:
+    post:
+      tags:
+        - Order
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: post-commande
+      responses:
+        '201':
+          description: Order Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/order_created'
+              examples:
+                Order Created:
+                  value:
+                    id: '12'
+        '401':
+          description: Unauthorized
+        '409':
+          description: Missing one field or improperly completed
+      security:
+        - bearerAuth: []
+  /order/{id}:
+    get:
+      tags:
+        - Order
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: get-order-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Order Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/order_found'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Order Not Found
+      security:
+        - bearerAuth: []
+    put:
+      tags:
+        - Order
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: put-commande-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Order Edited
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/edited'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Order Not Found
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - Order
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: delete-commande-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Order Deleted
+        '401':
+          description: Unauthorized
+        '404':
+          description: Order Not Found
+      security:
+        - bearerAuth: []
+  /orders:
+    get:
+      tags:
+        - Orders
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: get-commandes
+      responses:
+        '200':
+          description: Orders Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/order_found'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Orders Not Found
+      security:
+        - bearerAuth: []
+  /solutionForDomainOrder:
+    post:
+      tags:
+        - SolutionForDomainOrder
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: post-SolutionForDomainOrder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SolutionForDomainOrder'
+            example:
+              id_solution: 45
+              quantity: 12345
+              id_domain: 21
+        required: true
+      responses:
+        '201':
+          description: Solution Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/edited'
+        '401':
+          description: Unauthorized
+        '409':
+          description: Missing one field or improperly completed
+      security:
+        - bearerAuth: []
+  /solutionForDomainOrder/{id}:
+    get:
+      tags:
+        - SolutionForDomainOrder
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: get-consumable
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SolutionForDomain Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SolutionForDomain_found'
+        '401':
+          description: Unauthorized
+        '404':
+          description: SolutionForDomain
+      security:
+        - bearerAuth: []
+    put:
+      tags:
+        - SolutionForDomainOrder
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: put-SolutionForDomainOrder-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'SolutionForDomain Edited '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/edited'
+        '401':
+          description: Unauthorized
+        '404':
+          description: SolutionForDomain Not Found
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - SolutionForDomainOrder
+      description: To access this route you will need to be __AUTHENTIFIED__
+      operationId: /consumable/{id}
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SolutionForDomain Deleted
+        '401':
+          description: Unauthorized
+        '404':
+          description: SolutionForDomain Not Found
+      deprecated: false
+      security:
+        - bearerAuth: []
+components:
+  schemas:
+    client:
+      title: /client
+      required:
+        - adresse
+        - code
+        - code_postal
+        - contact
+        - id
+        - id_tenant
+        - isp_id
+        - numero
+        - numero_siret
+        - pays
+        - raison_sociale
+        - ville
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        adresse:
+          type: string
+        code:
+          type: integer
+          format: int32
+        code_postal:
+          type: integer
+          format: int32
+        contact:
+          type: string
+        id_tenant:
+          type: integer
+          format: int32
+        numero:
+          type: integer
+          format: int32
+        numero_siret:
+          type: integer
+          format: int32
+        pays:
+          type: string
+        raison_sociale:
+          type: string
+        isp_id:
+          type: integer
+          format: int32
+        ville:
+          type: string
+      example:
+        adresse: 12 rue la
+        code: 1234
+        code_postal: 12345
+        contact: a@a.com
+        id_tenant: 1
+        numero: 234567890
+        numero_siret: 777227777
+        pays: France
+        raison_sociale: TESTINGeuBYANTOINE
+        isp_id: 263
+        ville: Lyon
+    isp:
+      title: /isp
+      required:
+        - name
+        - pass
+        - ref
+      type: object
+      properties:
+        name:
+          type: string
+        pass:
+          type: string
+        ref:
+          type: string
+      example:
+        name: antoinetestinge
+        pass: '1231'
+        ref: theref
+        email: secuserve@secuserve.com
+    domain:
+      title: /domain
+      required:
+        - client_id
+        - email
+        - id_elt
+        - isp_id
+        - lang
+        - mailAdmin
+        - name
+        - quantity
+      type: object
+      properties:
+        name:
+          type: string
+        mailAdmin:
+          type: string
+        lang:
+          type: string
+        email:
+          type: string
+        client_id:
+          type: integer
+          format: int32
+        isp_id:
+          type: integer
+          format: int32
+        quantity:
+          type: integer
+          format: int32
+        id_elt:
+          type: integer
+          format: int32
+      example:
+        name: antoineistestingsomezing.com
+        mailAdmin: adddministratif@secuserve.com
+        lang: fr
+        client_id: 1
+        isp_id: 263
+        quantity: 10
+        id_elt: 41
+    SolutionForDomainOrder:
+      title: /SolutionForDomainOrder
+      required:
+        - id_domain
+        - id_sol
+        - quantity
+      type: object
+      properties:
+        id_sol:
+          type: integer
+          format: int32
+        quantity:
+          type: integer
+          format: int32
+        id_domain:
+          type: integer
+          format: int32
+      example:
+        id_sol: 41
+        quantity: 10
+        id_domain: 4967
+    solutionOnDomain:
+      title: /solutionOnDomain
+      required:
+        - id_domain
+        - id_sol
+        - quantity
+      type: object
+      properties:
+        id_sol:
+          type: integer
+          format: int32
+        quantity:
+          type: integer
+          format: int32
+        id_domain:
+          type: integer
+          format: int32
+      example:
+        id_sol: 41
+        quantity: 10
+        id_domain: 4967
+    loginCheck:
+      title: /loginCheck
+      required:
+        - password
+        - username
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      example:
+        username: ''
+        password: ''
+    solution:
+      title: /solution
+      required:
+        - famille
+        - id
+        - id_ref
+        - name
+        - name_client
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        name_client:
+          type: string
+        famille:
+          type: string
+        id_ref:
+          type: integer
+          format: int32
+      example:
+        id: 45
+        name: 12345 SecuTesting
+        name_client: SecuTest
+        famille: ANM
+        id_ref: 0
+    jwt_token_created:
+      type: object
+      properties:
+        token:
+          type: string
+      description: Return the JWT TOKEN
+      x-examples:
+        example-1:
+          token: JWT_TOKEN
+    client_created:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Return the id of the client created
+      description: Return the id of the Client Created
+    user_edited:
+      type: object
+      properties:
+        id:
+          type: string
+    clients_isp_logins:
+      required:
+        - commercial
+        - company_name
+        - created_by
+        - email
+        - id
+        - id_login_isp
+        - name
+        - pass
+        - stamp_last_connection
+        - stamp_maj
+        - technical_contact
+        - tel
+        - wsr
+      type: object
+      properties:
+        id:
+          type: number
+        stamp_maj:
+          minLength: 1
+          type: string
+        stamp_last_connection:
+          type: number
+        company_name:
+          minLength: 1
+          type: string
+        name:
+          minLength: 1
+          type: string
+        pass:
+          minLength: 1
+          type: string
+        wsr:
+          type: boolean
+        email:
+          minLength: 1
+          type: string
+        created_by:
+          type: string
+        id_login_isp:
+          type: number
+        commercial:
+          minLength: 1
+          type: string
+        tel:
+          minLength: 1
+          type: string
+        technical_contact:
+          minLength: 1
+          type: string
+    clients_isp:
+      required:
+        - id
+        - logins
+        - name
+        - ref
+      type: object
+      properties:
+        id:
+          type: number
+        logins:
+          $ref: '#/components/schemas/clients_isp_logins'
+        name:
+          minLength: 1
+          type: string
+        ref:
+          minLength: 1
+          type: string
+    client_found:
+      required:
+        - adresse
+        - code
+        - code_postal
+        - contact
+        - id
+        - id_tenant
+        - isp
+        - numero
+        - numero_siret
+        - pays
+        - raison_sociale
+        - ville
+      type: object
+      properties:
+        id:
+          type: number
+        id_tenant:
+          minLength: 1
+          type: string
+        code:
+          minLength: 1
+          type: string
+        numero_siret:
+          minLength: 1
+          type: string
+        numero:
+          minLength: 1
+          type: string
+        raison_sociale:
+          minLength: 1
+          type: string
+        isp:
+          $ref: '#/components/schemas/clients_isp'
+        contact:
+          minLength: 1
+          type: string
+        adresse:
+          minLength: 1
+          type: string
+        code_postal:
+          minLength: 1
+          type: string
+        ville:
+          minLength: 1
+          type: string
+        pays:
+          minLength: 1
+          type: string
+    isp_created:
+      type: object
+      properties:
+        id:
+          type: string
+      description: Return the id of the Isp Created
+    isp_found:
+      required:
+        - id
+        - logins
+        - name
+        - ref
+      type: object
+      properties:
+        id:
+          type: number
+        logins:
+          $ref: '#/components/schemas/clients_isp_logins'
+        name:
+          minLength: 1
+          type: string
+        ref:
+          minLength: 1
+          type: string
+    edited:
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          type: string
+    domain_created:
+      type: object
+      properties:
+        id:
+          type: string
+      description: Return the id of the Domain Created
+    domain_found:
+      type: object
+      properties:
+        id:
+          type: number
+        client:
+          $ref: '#/components/schemas/client_found'
+        stamp_maj:
+          type: string
+        name:
+          type: string
+        active:
+          type: boolean
+        lang:
+          type: string
+        commercial:
+          type: string
+        created_by:
+          type: string
+        period_eval:
+          type: string
+        mail_admin:
+          type: string
+        stamp_created:
+          type: number
+        srv_esecuremail:
+          type: number
+        srv_antivirus:
+          type: boolean
+        srv_optimail:
+          type: number
+        srv_premium:
+          type: number
+        srv_mobile:
+          type: number
+        srv_astrasync:
+          type: number
+        srv_notifysync:
+          type: number
+        srv_extradrive:
+          type: number
+        srv3gmail:
+          type: number
+        srv_im:
+          type: number
+        srv_website:
+          type: number
+        srv_archimails:
+          type: number
+        quota_adjust:
+          type: number
+        srv_extradrive1g:
+          type: number
+        srv_mailinflash:
+          type: number
+        srv_optimail1g:
+          type: number
+        srv_optimail25g:
+          type: number
+        srv_shex:
+          type: number
+        srv_premium1g:
+          type: number
+        srv_premium24g:
+          type: number
+        srv5gmail4g5g:
+          type: number
+        srv_mailtofax:
+          type: number
+        srv_mailtosms:
+          type: number
+        srv_faxtomail:
+          type: number
+        srv_video:
+          type: number
+        srv_synchro_ldap:
+          type: string
+        srv_continuity365:
+          type: number
+        critere_sla_esm:
+          type: number
+        critere_sla_opt:
+          type: number
+        abo_qua_auto:
+          type: boolean
+        altv2:
+          type: boolean
+        apikey_boostmymail:
+          type: string
+        delete_rate:
+          type: number
+        ldap_connections:
+          type: array
+          items:
+            type: object
+    SolutionForDomain_found:
+      type: object
+      properties:
+        id:
+          type: number
+        id_elt:
+          type: number
+        type_elt:
+          type: string
+        name:
+          type: string
+        quantity:
+          type: number
+        id_domain:
+          type: number
+        stamp_beg:
+          type: number
+        stamp_end:
+          type: number
+        stamp_maj:
+          type: string
+        active:
+          type: number
+    solution_added_on_domain:
+      type: object
+      properties:
+        id:
+          type: string
+      description: Return the id of the order
+    solution_created:
+      type: object
+      properties:
+        id:
+          type: string
+      description: Return the id of the Solution Created
+    solution_found:
+      type: object
+      properties:
+        id:
+          type: number
+        id_reference:
+          type: number
+        name:
+          type: string
+        name_client:
+          type: string
+        famille:
+          type: string
+        stamp_beg_comm:
+          type: number
+        stamp_end_comm:
+          type: number
+        stamp_maj:
+          type: string
+        active:
+          type: number
+    user_created:
+      type: object
+      properties:
+        id:
+          type: string
+      description: Return the id of the User Created
+    user_found:
+      type: object
+      properties:
+        id:
+          type: number
+        email:
+          type: string
+        civilite:
+          type: string
+        nom:
+          type: string
+        prenom:
+          type: string
+        isp:
+          type: string
+        created:
+          type: string
+        updated:
+          type: string
+        password:
+          type: string
+    order_created:
+      type: object
+      properties:
+        id:
+          type: string
+      description: Return the id of the Order Created
+    order_found:
+      type: object
+      properties:
+        id:
+          type: number
+        user_id:
+          type: number
+        type_cmd:
+          type: string
+        type_sol:
+          type: string
+        domain_id:
+          type: number
+        solution_id:
+          type: number
+        solution_component_id:
+          type: number
+        quantity:
+          type: number
+        params:
+          type: string
+        isp_id:
+          type: number
+        created:
+          type: string
+        updated:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
